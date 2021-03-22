@@ -1,5 +1,5 @@
 const express   = require('express');
-const monk        = require('monk');
+const monk      = require('monk');
 const joi       = require('@hapi/joi');
 
 const db        = monk(process.env.MONGO_URI);

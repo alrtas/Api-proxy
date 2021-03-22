@@ -19,9 +19,14 @@ app.use(express.json());
 
 
 //Here is the important stuff is going on
-
-app.use('/',middlewares.log, middlewares.limiter(), middlewares.speedLimiter(), api);
-
+app.use(
+          '/api/v1',
+          middlewares.log,
+          middlewares.cache,
+          //middlewares.limiter('ip'),
+          middlewares.speedLimiter,
+          api
+);
 
 
 
