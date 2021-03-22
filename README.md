@@ -30,4 +30,6 @@ testes de carga, mas avaliaremos se a arquitetura utilizada é escalável o sufi
 
 # Exemplo arquitetura
 ![image](https://user-images.githubusercontent.com/32065208/112071293-3a7e5580-8b4e-11eb-8729-343668e8c357.png)
+# Middlewares
 
+![image](https://user-images.githubusercontent.com/32065208/112072488-af528f00-8b50-11eb-8533-848d472e8e3e.png)
