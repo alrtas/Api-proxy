@@ -29,7 +29,7 @@ function log(req, res, next)
       ip          : req.ip,
       createdAt   : new Date()
     }
-    //logs.insert(logSchema);
+    logs.insert(logSchema);
     next(req.baseUrl);
 }
   
