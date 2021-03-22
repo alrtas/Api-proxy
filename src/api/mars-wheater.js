@@ -1,7 +1,5 @@
 const express   = require('express');
 const axios     = require('axios');
-const rateLimit = require("express-rate-limit");
-const slowDown  = require('express-slow-down');
 const app       = require('../app');
 
 
@@ -12,22 +10,11 @@ const apiKeys = new Map();
 apiKeys.set('12345',true);
 
 
-
-const speedLimiter = slowDown({
-    windowMs: 30*1000,
-    delayAfter: 3,
-    delayMs: 500
-})
-
-const limiter = rateLimit({
-    windowMs: 30*1000,
-    max: 10
-})
-
 let cachedData;
 let cacheTime;
 
-router.get('/', speedLimiter, limiter,(req, res, next) =>{
+router.get('/',(req, res, next) =>{
+    
     const apiKey = req.get('X-API-KEY');
     if(apiKeys.has(apiKey))
     {
@@ -37,6 +24,7 @@ router.get('/', speedLimiter, limiter,(req, res, next) =>{
     {
         const error =  new Error('Invalid API KEY');
         next(error);
+        //next();
     }
 } ,async (req, res, next) => {
     if(cacheTime && cacheTime > Date.now() -  30*1000)
