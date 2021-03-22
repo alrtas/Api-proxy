@@ -1,17 +1,17 @@
 # Mercado livre API Proxy
 
 ## Desafio
-- [ ] Executar a função de proxy sobre o domínio api.mercadolibre.com, isto é, ele deve agir como
+- [x] Executar a função de proxy sobre o domínio api.mercadolibre.com, isto é, ele deve agir como
 um intermediário para as requisições dos clientes, enviando-as à api.mercadolibre.com.
 - [ ] Deverá permitir o controle das quantidades máximas de requisições por:
-  - [ ] IP de origem
+  - [x] IP de origem
   - [ ] Path de destino
   - [ ] Combinações de ambos
 - [ ] Deve armazenar (e também permitir que se consulte) as estatísticas de uso do proxy.
 ## Adicional
 - [ ] A interface para estatísticas e controle deveria prover APIs Rest.
 - [ ] Um desenho simples de arquitetura da solução conta muito.
-- [ ] Cache
+- [x] Cache
 
 ## Outros
 Sabemos que o teste é complexo e seria desejável ter todos os requisitos implementados (e
