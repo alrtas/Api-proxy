@@ -22,7 +22,11 @@ que possamos avaliá-lo.<br>
 O proxy (como solução) deverá poder superar 50.000 requisições por segundo. Não faremos
 testes de carga, mas avaliaremos se a arquitetura utilizada é escalável o suficiente.
 
-# Stack
+# Entendimento do problema
+
+# Outras soluções
+
+# Técnologias utilizadas
 
 * Node JS (Express API)
 * Mongo DB
@@ -30,6 +34,16 @@ testes de carga, mas avaliaremos se a arquitetura utilizada é escalável o sufi
 
 # Exemplo arquitetura
 ![image](https://user-images.githubusercontent.com/32065208/112071293-3a7e5580-8b4e-11eb-8729-343668e8c357.png)
-# Middlewares
 
+# Middlewares
 ![image](https://user-images.githubusercontent.com/32065208/112072488-af528f00-8b50-11eb-8533-848d472e8e3e.png)
+
+# Melhorias
+  1. Alterar sistema de cache para utilizar `Redis` ao inves de `MongoDB`, uma vez que Redis é uma aplicação que funciona de maneira *in memory* entregará uma performance superior ao monogoDB quando atuando em Cache. 
+  2. Desacoplar /api/proxy-usage.js em outro projeto, uma vez que o objetivo desse script é gerar APIs para verificar o uso do api proxy e fornecer dados para o front-end do dashboard, o mesmo poderia estar rodando em um container a parte, uma vez que todos os dados de uso são guardados em banco e não in memory.
+
+# FAQ
+ 1. Porque JavaScript (Node.JS - Express)?
+ 2. Porque MongoDB?
+
+# Dependencias do projeto
