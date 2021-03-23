@@ -1,5 +1,10 @@
 # Mercado livre API Proxy
-
+O MercadoLivre possui atualmente +30.000 servidores onde suas aplicações são executadas. Elas
+comunicam-se entre si através de apis, sendo que algumas possuem ainda acesso externo
+(api.mercadolibre.com).
+Um dos problemas que temos é como controlar e medir estas interconexões.
+Para isso, precisamos implementar (codifique) um "proxy de apis" com os seguintes requisitos (em
+ordem de importância):
 ## Desafio
 - [x] Executar a função de proxy sobre o domínio api.mercadolibre.com, isto é, ele deve agir como
 um intermediário para as requisições dos clientes, enviando-as à api.mercadolibre.com.
@@ -24,13 +29,16 @@ testes de carga, mas avaliaremos se a arquitetura utilizada é escalável o sufi
 
 # Entendimento do problema
 
-# Outras soluções
-
-# Técnologias utilizadas
+# Proposta de solução
+Para solucionar o problema, lembrando que no texto está explicito a necessidade de codificar, foi pensado em um estrutura, em JavaScript, que irá atuar como Proxy em todo o dominio `/`, ou seja, se o dominio da maquina sendo `api.mercadolibre.com` todas as requisições para o dominio passaram pelo proximo.<br>
+Aplicará (ou não) um path obrigatório, como `api/v1` e neste path aplicará as politicas solicitadas, como controle de acesso por IP, Path, ou a junção de ambos
+### Técnologias utilizadas
 
 * Node JS (Express API)
 * Mongo DB
-* React  
+
+# Outras soluções
+
 
 # Exemplo arquitetura
 ![image](https://user-images.githubusercontent.com/32065208/112071293-3a7e5580-8b4e-11eb-8729-343668e8c357.png)
