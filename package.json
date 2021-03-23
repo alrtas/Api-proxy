@@ -18,6 +18,7 @@
   "license": "MIT",
   "dependencies": {
     "@hapi/joi": "^17.1.1",
+    "autocannon": "^7.0.5",
     "axios": "^0.21.1",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
@@ -26,7 +27,8 @@
     "express-rate-limit": "^5.2.6",
     "express-slow-down": "^1.4.0",
     "helmet": "^4.4.1",
-    "monk": "^7.3.3",
+    "mongodb": "^3.6.5",
+    "mongoose": "^5.12.2",
     "morgan": "^1.10.0",
     "redis": "^3.0.2"
   },

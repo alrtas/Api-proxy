@@ -1,16 +1,29 @@
-const monk      = require('monk');
-const cache     = monk(process.env.MONGO_CACHE_URI).get('cache');
+async function set(data, uri) {
+    try 
+    {
+        const db        = require('./db');
+        const Cache     = require('./models/cache');
+        const mongoose  = await db.connect();
 
-async function set(data, uri)
-{
-    const cacheData = {
-        time: Date.now(),
-        originalUrl: uri,
-        response: data
+        const cache = new Cache({
+            _id: new mongoose.Types.ObjectId(),
+            time: Date.now(),
+            originalUrl: uri,
+            response: data
+        })
+
+        await Cache.findOneAndUpdate({originalUrl: uri},
+            {$set:{time:cache.time,response:cache.response}},
+            {new: true},
+            (err,doc) => {
+                if(doc == null) 
+                    cache.save();
+        })
     }
-    let hasCacheRegistry = await cache.findOneAndUpdate({originalUrl: uri}, { $set: cacheData });
-    if(hasCacheRegistry==null)
-        await cache.insert(cacheData);
+    catch (error) 
+    {
+        console.dir('error on setting cache on database')
+    }
 }
 
-module.exports = {set};
+module.exports = {  set  };

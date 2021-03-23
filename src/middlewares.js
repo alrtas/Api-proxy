@@ -3,104 +3,100 @@ function notFound(req, res, next) {
     const error = new Error(`🔍 - Not Found - ${req.originalUrl}`);
     next(error);
 }
-  
-/* eslint-disable no-unused-vars */
+
 function errorHandler(err, req, res, next) {
     /* eslint-enable no-unused-vars */
     const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
     res.status(statusCode);
     res.json({
-      message: err.message,
+      message: 'error',
+      reason: err.message,
       stack: process.env.NODE_ENV === 'production' ? '🥞' : err.stack
     });
 }
   
-function log(req, res, next)
+async function log(req, res, next)
 {
-    const monk  = require('monk');
-    const logs  = monk(process.env.MONGO_LOG_URI).get('api-proxy-logs');
-    const logSchema = {
-      baseUrl     : req.baseUrl,
-      originalUrl : req.originalUrl,
-      path        : req.path,
-      method      : req.method,
-      protocol    : req.protocol,
-      hostName    : req.hostname,  
-      ip          : req.ip,
-      createdAt   : new Date()
+    try
+    {
+        const db        = require('./db');
+        const Log       = require('./models/log');
+        const mongoose  = await db.connect();
+
+        const log  = new Log({
+            _id         : new mongoose.Types.ObjectId(),
+            time        : Date.now(),
+            baseUrl     : req.baseUrl,
+            originalUrl : req.originalUrl,
+            path        : req.path,
+            method      : req.method,
+            protocol    : req.protocol,
+            hostName    : req.hostname,  
+            ip          : req.ip,
+        })
+        await log.save();
+        console.dir('[Log Middleware] ----> SUCCESS'); next();
     }
-    logs.insert(logSchema);
-    next(req.baseUrl);
+    catch(err)
+    {
+        next(err);
+    }
 }
-  
-function cache(err, req, res, next)
-{
+
+async function cache(req, res, next){
     try 
     {
-        const monk  = require('monk');
-        const cache = monk(process.env.MONGO_CACHE_URI).get('cache');
-
-        cache.findOne({originalUrl:req.originalUrl}).then((doc) => {
-            if(doc != undefined && doc.time && doc.time >  Date.now() - 60 * 1000){
-                res.json(doc.response)
-            }else{
-                next();  
-            }    
-        });
-    }
-    catch (error)
-    {
-        var cacheErro = 'Cache erro'
-        next(cacheErro);
-    }
+        const db    = require('./db');
+            db.connect()
+        const Cache = require('./models/cache');
+        const lastMinute =  new Date() - process.env.CACHE_TIME*1000;
         
-    
-}
+        
+        const item = await Cache.findOne({
+            originalUrl: req.originalUrl,
+            time: { $gt: lastMinute}
+        });
 
+        if(item == null){
+            console.dir('[Cache Middleware] --> SUCCESS --> Getting new http request')
+            next();
+        }else{
+            console.dir('[Cache Middleware] --> SUCCESS --> Showing cached data')
+            res.json(item.response)
+        }
+    } 
+    catch (err) 
+    {   
+        next(err);  
+    }
+}
 
 function limiter(err, req, res, next)
 {
-    if(err == 'ip')
-    {
-        const rateLimit = require("express-rate-limit");
-        const rateLimiter = rateLimit({
-            windowMs: 30*1000,
-            max: 10,
-            headers: true
-        })
-        return rateLimiter;
-    }
-    next();
+    const rateLimit = require("express-rate-limit");
+    const rateLimiter = rateLimit({
+        windowMs: 30*1000,
+        max: 10,
+        headers: true
+    })
+    return rateLimiter;
 }
   
 function speedLimiter(err, req, res, next)
 {
     const slowDown  = require('express-slow-down');
-    const monk      = require('monk');
-    const date      = new Date();
-    switch(err){
-        case 'ip':
-            const speedLimiter = slowDown({
+    const speedLimiter = slowDown({
             windowMs: 30*1000,
             delayAfter: 1,
             delayMs: 500
-            })
-            return speedLimiter;
-        case 'path':
-            break;
-        case 'path+ip':
-            break;
-        default:
-            next();
-    }
+    })
+    return speedLimiter;
 }
   
   module.exports = {
     notFound,
     errorHandler,
     log,
-    cache,
-    limiter,
-    speedLimiter
+    cache
   };
   
