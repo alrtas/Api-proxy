@@ -1,98 +1,106 @@
 const express   = require('express');
-const monk      = require('monk');
-const joi       = require('@hapi/joi');
+const Faq       = require('../models/faq');
+const cache     = require('../cache');
+const db        = require('../db');
+const router    = express.Router();
 
-const db        = monk(process.env.MONGO_URI);
-const faqs      = db.get('faqs');
+db.connect()
 
-const schema = joi.object({
-    question: joi.string().trim().required(),
-    answer  : joi.string().trim().required(),
-    videoUrl: joi.string().uri(),
-})
-
-
-const router = express.Router();
-
-//READ ALL
 router.get('/',async (req, res, next) => {
-  
-    try {
-        const items = await faqs.find({});
-
-        
+    try 
+    {
+        const items = await Faq.find({});
+        await cache.set(items, req.originalUrl);
         res.json(items);
-
-    } catch (error) {
+    } 
+    catch (error) 
+    {
         next(error);
     }
 
 });
 
-//READ ONE
 router.get('/:id', async (req, res, next) => {
-
-    try {
+    try 
+    {
         const { id } =  req.params;
-        const item = await faqs.findOne({
+        const item = await Faq.findOne({
             _id: id,
         });
-
+        await cache.set(item, req.originalUrl);
         if(!item) return next();
         return res.json(item);
-    }catch (error) {
+    }
+    catch (error) 
+    {
         next(error);
     }
 });
 
-//CREATE ONE
 router.post('/',async (req, res, next) => {
-  try {
-        const value = await schema.validateAsync(req.body);
+    try 
+    {
+        const faq = new Faq(req.body);
+        await faq.validate()
+                 .catch(err => {
+                     res.json(err.erros.answer)
+        });
+        const id = await faq.save();
+        res.json({message:'success',id:id._id});
 
-        const inserted = await faqs.insert(value);
-
-        res.json(inserted);
-   } catch (error) {
-        next(error)
-   }
+    } 
+    catch (err) 
+    {
+        next(err)
+    }
 });
 
-//UPDATE ONE
 router.put('/:id', async (req, res, next) => {
-  try {
+    try 
+    {
         const { id } =  req.params;
-        const item = await faqs.findOne({
-            _id: id,
-        });
-        if(!item) return next();
-
-        const value = await schema.validateAsync(req.body);
-
-        const updated = await faqs.update({
-            _id: id,
-        },{
-            $set: value,
+        const faq = new Faq(req.body);
+        await faq.validate()
+                 .catch(err => {
+                     res.json(err.erros.answer)
         });
 
-        res.json(updated);
-   } catch (error) {
+        let updated = await Faq.findOneAndUpdate({_id: id},
+            {$set:req.body},
+            {new: true}
+        )
+        console.dir(updated);
+        if(updated == null){
+            res.status(404);
+            const error =  new Error(`Object id: ${id} does not exist in database`)
+            next(error);
+        }else{
+            res.json({message:'success',id:id});
+        }        
+    } 
+    catch (error) 
+    {
         next(error);
-   }
+    }
 });
 
-//DELETE ONE
 router.delete('/:id',async (req, res, next) => {
-  try {
-    const { id } =  req.params;
-
-        await faqs.remove({ _id:id });
-        res.json({
-            message: 'sucess',
-        })  
-   } catch (error) {
+    try 
+    {
+        const { id } =  req.params;
+        new Faq();
+        let deleted = await Faq.findOneAndDelete({ _id:id });
+        if(deleted == null){
+            const error =  new Error(`Object id: ${id} does not exist in database`)
+            next(error);
+        }else{
+            res.json({message:'success',id:id});
+        }        
+    } 
+    catch (error) 
+    {
         next(error);
-   }
+    }
 });
 
 module.exports=router;
