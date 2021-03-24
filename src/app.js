@@ -18,6 +18,7 @@ app.use(express.json());
 //Here is the important stuff is going on
 app.use('/api/v1',
         middlewares.log,
+        middlewares.limiter,
         middlewares.cache,
         api
 );

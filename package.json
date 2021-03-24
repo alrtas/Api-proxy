@@ -24,7 +24,6 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-limiter": "^1.6.1",
-    "express-rate-limit": "^5.2.6",
     "express-slow-down": "^1.4.0",
     "helmet": "^4.4.1",
     "mongodb": "^3.6.5",

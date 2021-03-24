@@ -1,10 +1,12 @@
-function notFound(req, res, next) {
+function notFound(req, res, next) 
+{
     res.status(404);
     const error = new Error(`🔍 - Not Found - ${req.originalUrl}`);
     next(error);
 }
 
-function errorHandler(err, req, res, next) {
+function errorHandler(err, req, res, next) 
+{
     /* eslint-enable no-unused-vars */
     const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
     res.status(statusCode);
@@ -35,7 +37,7 @@ async function log(req, res, next)
             ip          : req.ip,
         })
         await log.save();
-        console.dir('[Log Middleware] ----> SUCCESS'); next();
+        console.dir('[Log Middleware] -----> SUCCESS'); next();
     }
     catch(err)
     {
@@ -43,7 +45,8 @@ async function log(req, res, next)
     }
 }
 
-async function cache(req, res, next){
+async function cache(req, res, next)
+{
     try 
     {
         const db    = require('./db');
@@ -58,10 +61,10 @@ async function cache(req, res, next){
         });
 
         if(item == null){
-            console.dir('[Cache Middleware] --> SUCCESS --> Getting new http request')
+            console.dir('[Cache Middleware] ---> SUCCESS --> Getting new http request')
             next();
         }else{
-            console.dir('[Cache Middleware] --> SUCCESS --> Showing cached data')
+            console.dir('[Cache Middleware] ---> SUCCESS --> Showing cached data')
             res.json(item.response)
         }
     } 
@@ -71,32 +74,43 @@ async function cache(req, res, next){
     }
 }
 
-function limiter(err, req, res, next)
+async function limiter(req, res, next)
 {
-    const rateLimit = require("express-rate-limit");
-    const rateLimiter = rateLimit({
-        windowMs: 30*1000,
-        max: 10,
-        headers: true
-    })
-    return rateLimiter;
-}
-  
-function speedLimiter(err, req, res, next)
-{
-    const slowDown  = require('express-slow-down');
-    const speedLimiter = slowDown({
-            windowMs: 30*1000,
-            delayAfter: 1,
-            delayMs: 500
-    })
-    return speedLimiter;
+    const windowMs  = ((process.env.LIMMITER_WINDOWMS*60)*60*1000) || 60*60*1000;
+    const max       = process.env.LIMMITER_MAX || 20;
+    const choice    = process.env.LIMMITER_TYPE || 'ippath';
+    const delay     = ms => new Promise(resolve => setTimeout(resolve, ms))
+    
+    try 
+    {
+        const limiters = require('./limiters')
+        const limiter = {
+            path    : limiters.path(windowMs, req.originalUrl),
+            ippath  : limiters.ippath(windowMs, req.originalUrl, req.ip),
+            ip      : limiters.ip(windowMs, req.ip)
+        }
+        const items = await limiter[choice];
+        console.dir('[Limiter Middleware] -> SUCCESS');
+        if(items > max)
+        {
+            await delay((items-max)*100)
+            res.status(429);
+            const err = new Error(`Too many requests`);
+            next(err);   
+        }
+        next();    
+    } 
+    catch (err) 
+    {
+        next(err);
+    }
 }
   
   module.exports = {
-    notFound,
-    errorHandler,
     log,
-    cache
+    cache,
+    limiter,
+    notFound,
+    errorHandler
   };
   

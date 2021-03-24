@@ -12,7 +12,7 @@ async function connect() {
                 useFindAndModify: false
             })
             .then(
-                console.log('[DataBase] --> Connected')
+                //console.log('[DataBase] --> Connected')
             )
             .catch((err)=>{
                 console.dir('[DataBase] --> Not connected: '+err);
