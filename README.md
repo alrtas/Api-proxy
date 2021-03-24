@@ -30,8 +30,15 @@ testes de carga, mas avaliaremos se a arquitetura utilizada é escalável o sufi
 # Entendimento do problema
 
 # Proposta de solução
-Para solucionar o problema, lembrando que no texto está explicito a necessidade de codificar, foi pensado em um estrutura, em JavaScript, que irá atuar como Proxy em todo o dominio `/`, ou seja, se o dominio da maquina sendo `api.mercadolibre.com` todas as requisições para o dominio passaram pelo proximo.<br>
-Aplicará (ou não) um path obrigatório, como `api/v1` e neste path aplicará as politicas solicitadas, como controle de acesso por IP, Path, ou a junção de ambos
+Para solucionar o problema, lembrando que no texto está explicito a necessidade de codificar, foi pensado em um estrutura, em JavaScript, que irá atuar como Proxy em todo o dominio `/`, ou seja, todas as requisições que passarem pela maquina, na aplicação foi adicionado um path `/api/v1` onde também atuam todos os middlewares, para conclusão do desafio foram codificados os seguintes middlewares.
+ - Logs
+    - Irá salvar em um banco de dados mongodb em *proxy.logs* um documento para cada requisição realizada que passe pelo path */api/v1/*, salvando informações como, `horário`, `ip`, e dados do `path`.   
+- Limitadores
+   - Será responsavel, por realizar uma busca no banco de dados mongodb em *proxy.logs* se existem um determinado número de chamadas (informado via `.env`) para um determinado *path* ou *ip* (ou os *dois*, basta configurar no `.env`) em um periodo de tempo determinado. (também via `.env`), caso tenha excedido irá receber um retorno com status http em `429 Too Many Requests`, receberá um body, com ```{message: "error", reason: "Too Many Requests", stack: "...} ```. Cada chamado realizado após esse limite, receberá um delay de 100ms nas respostas, incremental de acordo com a quantidade de novos chamados, com o proposito de desencorajar ataques.
+   - Exemplo de configuração no .env: `LIMMITER_WINDOWMS = 1` / `LIMMITER_MAX  = 10000` / `LIMMITER_TYPE = ippath; `, com está configuração irá validar se, na ultima horá foram realizadas mais de 10.000 requisições usando a combinação do path+ip, assim caso um determinado IP faça mais de 10.000 requisições me menos de um horá para um determinado endpoint, será bloqueado, enquanto em outro endpoint. Não.
+ - Cache
+    - Fornecerá um camada de cachce para melhorar o tempo resposta das requisições  
+ 
 ### Técnologias utilizadas
 
 * Node JS (Express API)
