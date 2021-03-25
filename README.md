@@ -80,6 +80,7 @@ Além dos middlwares apresentados, existem outros dois que tratam erros e exceç
 # Melhorias
   1. Alterar sistema de cache para utilizar `Redis` ao inves de `MongoDB`, uma vez que Redis é uma aplicação que funciona de maneira *in memory* entregará uma performance superior ao monogoDB quando atuando em Cache. 
   2. Desacoplar `api/proxy-usage.js` e `api/faqs/*` em outros projetos, uma vez que o objetivo desse script é gerar APIs para verificar o uso do api proxy e fornecer dados para o front-end do dashboard, o mesmo poderia estar rodando em um container a parte, uma vez que todos os dados de uso são guardados em banco e não in memory.
+  3. Realizar o rate limit por aplicação, para isso seria necessário criar o conceito de aplicação, onde o desenvolvedor iria cria-lá e receber um token para essa aplicação, e então iria subscrever as APIs que gostaria de utilizar nesta aplicação, assim seria possivel fazer o monitoramento, além do apresentado, por ip, path, ip+path mas também pela aplicação inteira, criando regras de governanças mais voltadas ao negócio geral e não a api em si.
 
 # FAQ
  1. Porque JavaScript (Node.JS - Express)?
