@@ -37,7 +37,11 @@ Para solucionar o problema, lembrando que no texto está explicito a necessidade
    - Será responsavel, por realizar uma busca no banco de dados mongodb em *proxy.logs* se existem um determinado número de chamadas (informado via `.env`) para um determinado *path* ou *ip* (ou os *dois*, basta configurar no `.env`) em um periodo de tempo determinado. (também via `.env`), caso tenha excedido irá receber um retorno com status http em `429 Too Many Requests`, receberá um body, com ```{message: "error", reason: "Too Many Requests", stack: "...} ```. Cada chamado realizado após esse limite, receberá um delay de 100ms nas respostas, incremental de acordo com a quantidade de novos chamados, com o proposito de desencorajar ataques.
    - Exemplo de configuração no .env: `LIMMITER_WINDOWMS = 1` / `LIMMITER_MAX  = 10000` / `LIMMITER_TYPE = ippath; `, com está configuração irá validar se, na ultima horá foram realizadas mais de 10.000 requisições usando a combinação do path+ip, assim caso um determinado IP faça mais de 10.000 requisições me menos de um horá para um determinado endpoint, será bloqueado, enquanto em outro endpoint. Não.
  - Cache
-    - Fornecerá um camada de cachce para melhorar o tempo resposta das requisições  
+    - Fornecerá um camada de cache para melhorar o tempo resposta das requisições, tendo como premissa que as as apis que desejarem utilizar o cache, deverão importar a função cache e realizar um Set da resposta obtida. Para que o middleware de cache consiga analisar se para o `path` solicitado, existe um documento no banco de dados monogdb em *proxy.cache* onde o atributo **time** esteja dentro do ultimo minuto, caso esteja, irá retornar a resposta como o documento do banco, não realizando uma nova chamada ao endpoint e melhorando o tempo resposta.
+
+Todos os middlewares são executados na ordem apresentada após isto a requisição é encaminhada para o código dentro de `api/index.js` onde irá avaliar o restante do `path` e se for um dos configurdos, como `/emojis` ou `/faqs` ou `/mars-weather` irá encaminhar ao respectivo arquivo de api de cada um deles. Estes irão realizar as ações necessárias e efetuar o retorno em JSON. Caso seja necessário adicionar uma nova API, basta adicionar um arquivo com o nome da API e com o respectivo código, assim como o seu caminho no `/api/index.js`.
+
+Além dos middlwares apresentados, existem outros dois que tratam erros e exceções, sendo que em qualquer middleware se for passado a função next(error) com um parametro de erro que pode ser a mensagem que irá aparecer para o clinete na ponta, chegara nestes middlwares e sera tratado e dado a resposta para o cliente. Existem somente dois tratamento, para casos de 404, não encontrado e de exceção não espearada 500, outros códigos/tratamentos devem ser implentados ainda.
  
 ### Técnologias utilizadas
 
@@ -62,3 +66,12 @@ Para solucionar o problema, lembrando que no texto está explicito a necessidade
  2. Porque MongoDB?
 
 # Dependencias do projeto
+    "autocannon": "^7.0.5",
+    "axios": "^0.21.1",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^4.4.1",
+    "mongodb": "^3.6.5",
+    "mongoose": "^5.12.2",
+    "morgan": "^1.10.0",
