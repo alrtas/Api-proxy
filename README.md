@@ -29,6 +29,20 @@ testes de carga, mas avaliaremos se a arquitetura utilizada é escalável o sufi
 
 # Entendimento do problema
 
+Um proxy de API é uma interface para desenvolvedores que desejam usar seus serviços de back-end. Em vez de fazer com que eles consumam esses serviços diretamente, eles acessam um proxy de API criado. Com um proxy, você pode fornecer recursos para aumentar o valor agregado, como:
+ - Segurança
+ - Analise
+ - Tratamento de falhas
+ - Cache e persistência
+ - Cotas
+ - Transformações
+ - Monetizar
+
+O proxy da API isola o desenvolvedor do aplicativo de seu serviço de back-end. Portanto, você está livre para alterar a implementação do serviço, desde que a API pública permaneça consistente. Por exemplo, você pode alterar a implementação de um banco de dados, mover seus serviços para um novo host ou fazer qualquer outra alteração na implementação do serviço. Ao manter uma API de front-end consistente, os aplicativos cliente existentes continuarão a funcionar independentemente das alterações no back-end.
+
+Você pode usar políticas no proxy de API para adicionar funcionalidade a um serviço sem ter que fazer alterações no serviço de back-end. Por exemplo, você pode adicionar políticas ao seu proxy para realizar transformações e filtragem de dados, adicionar segurança, executar lógica condicional ou código personalizado e muitas outras ações. O importante a lembrar é que você implementa políticas no Edge, não em seu servidor de back-end.
+
+
 # Proposta de solução
 Para solucionar o problema, lembrando que no texto está explicito a necessidade de codificar, foi pensado em um estrutura, em JavaScript, que irá atuar como Proxy em todo o dominio `/`, ou seja, todas as requisições que passarem pela maquina, na aplicação foi adicionado um path `/api/v1` onde também atuam todos os middlewares, para conclusão do desafio foram codificados os seguintes middlewares.
  - Logs
@@ -50,16 +64,22 @@ Além dos middlwares apresentados, existem outros dois que tratam erros e exceç
 
 # Outras soluções
 
+* [Apigee](https://cloud.google.com/apigee?hl=pt-br)
+* [NGINX Plus](https://www.nginx.com/solutions/api-management-gateway/)
+
 
 # Exemplo arquitetura
 ![image](https://user-images.githubusercontent.com/32065208/112071293-3a7e5580-8b4e-11eb-8729-343668e8c357.png)
 
 # Middlewares
-![image](https://user-images.githubusercontent.com/32065208/112072488-af528f00-8b50-11eb-8533-848d472e8e3e.png)
+![log_mediator](https://user-images.githubusercontent.com/32065208/112524630-d098c280-8d7e-11eb-84e7-8f82bebf3a95.PNG)
+![limiter_mediator](https://user-images.githubusercontent.com/32065208/112525070-469d2980-8d7f-11eb-9c5f-4d1469d692bc.PNG)
+![cache_mediator](https://user-images.githubusercontent.com/32065208/112524671-d7273a00-8d7e-11eb-85e5-94ab82721dfc.PNG)
+
 
 # Melhorias
   1. Alterar sistema de cache para utilizar `Redis` ao inves de `MongoDB`, uma vez que Redis é uma aplicação que funciona de maneira *in memory* entregará uma performance superior ao monogoDB quando atuando em Cache. 
-  2. Desacoplar /api/proxy-usage.js em outro projeto, uma vez que o objetivo desse script é gerar APIs para verificar o uso do api proxy e fornecer dados para o front-end do dashboard, o mesmo poderia estar rodando em um container a parte, uma vez que todos os dados de uso são guardados em banco e não in memory.
+  2. Desacoplar `api/proxy-usage.js` e `api/faqs/*` em outros projetos, uma vez que o objetivo desse script é gerar APIs para verificar o uso do api proxy e fornecer dados para o front-end do dashboard, o mesmo poderia estar rodando em um container a parte, uma vez que todos os dados de uso são guardados em banco e não in memory.
 
 # FAQ
  1. Porque JavaScript (Node.JS - Express)?
