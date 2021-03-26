@@ -43,7 +43,8 @@ router.post('/',async (req, res, next) => {
         const faq = new Faq(req.body);
         await faq.validate()
                  .catch(err => {
-                     res.json(err.erros.answer)
+                    res.status(400);
+                    next(err);
         });
         const id = await faq.save();
         res.json({message:'success',id:id._id});
@@ -62,7 +63,8 @@ router.put('/:id', async (req, res, next) => {
         const faq = new Faq(req.body);
         await faq.validate()
                  .catch(err => {
-                     res.json(err.erros.answer)
+                    res.status(400);
+                    next(err); 
         });
 
         let updated = await Faq.findOneAndUpdate({_id: id},

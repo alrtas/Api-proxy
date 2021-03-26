@@ -18,6 +18,7 @@ router.get('/',(req, res, next) =>{
     }
     else
     {
+        res.status(401);
         const error =  new Error('Invalid API KEY');
         next(error);
     }
