@@ -18,6 +18,6 @@ describe('GET /', () => {
       .get('/')
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
-      .expect(404, done);
+      .expect(200, done);
   });
 });
