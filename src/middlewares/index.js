@@ -11,7 +11,8 @@
 const log           =  require('./log');
 const limiter       =  require('./limiter');
 const cache         =  require('./cache');
+const security      =  require('./security');
 const notFound      =  require('./notFound');
 const errorHandler  =  require('./errorHandler');
 
-module.exports = {log, limiter, cache, errorHandler, notFound}
+module.exports = {log, limiter, cache, security,errorHandler, notFound}
