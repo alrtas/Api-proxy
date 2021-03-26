@@ -11,9 +11,7 @@ async function connect() {
                 useCreateIndex: true,
                 useFindAndModify: false
             })
-            .then(
-                //console.log('[DataBase] --> Connected')
-            )
+            .then()
             .catch((err)=>{
                 console.dir('[DataBase] --> Not connected: '+err);
                 connect()
@@ -26,4 +24,5 @@ async function connect() {
         console.dir('[DataBase] --> FATAL ERROR: '+err)
     }
 }
+
 module.exports = {  connect  };
