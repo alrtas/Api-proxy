@@ -7,7 +7,6 @@ function notFound(req, res, next)
 
 function errorHandler(err, req, res, next) 
 {
-    /* eslint-enable no-unused-vars */
     const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
     res.status(statusCode);
     res.json({
@@ -21,12 +20,9 @@ async function log(req, res, next)
 {
     try
     {
-        const db        = require('./db');
         const Log       = require('./models/log');
-        const mongoose  = await db.connect();
 
         const log  = new Log({
-            _id         : new mongoose.Types.ObjectId(),
             time        : Date.now(),
             baseUrl     : req.baseUrl,
             originalUrl : req.originalUrl,
@@ -37,7 +33,7 @@ async function log(req, res, next)
             ip          : req.ip,
         })
         await log.save();
-        console.dir('[Log Middleware] -----> SUCCESS'); next();
+        next();
     }
     catch(err)
     {
@@ -61,12 +57,13 @@ async function cache(req, res, next)
         });
 
         if(item == null){
-            console.dir('[Cache Middleware] ---> SUCCESS --> Getting new http request')
             next();
-        }else{
-            console.dir('[Cache Middleware] ---> SUCCESS --> Showing cached data')
+        }
+        else{
             res.json(item.response)
         }
+            
+        
     } 
     catch (err) 
     {   
@@ -90,7 +87,6 @@ async function limiter(req, res, next)
             ip      : limiters.ip(windowMs, req.ip)
         }
         const items = await limiter[choice];
-        console.dir('[Limiter Middleware] -> SUCCESS');
         if(items > max)
         {
             await delay((items-max)*100)

@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const logSchema = mongoose.Schema({
-    _id         : mongoose.Schema.Types.ObjectId,
     time        : Date,
     originalUrl : String,
     path        : String,
