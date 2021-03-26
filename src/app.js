@@ -1,29 +1,31 @@
+require('dotenv').config();
+
 const express     = require('express');
 const morgan      = require('morgan');
 const helmet      = require('helmet');
 const cors        = require('cors');
-
-require('dotenv').config();
-
 const middlewares = require('./middlewares');
 const api         = require('./api');
+const db          = require('./db');
 const app         = express();
-app.set('trust proxy', 1);
 
+db.connect();
+
+app.set('trust proxy', 1);
 app.use(morgan('dev'));
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
-//Here is the important stuff is going on
+
+
 app.use('/',
-        middlewares.log,
-        //middlewares.limiter,
-        middlewares.cache,
+        middlewares.log.run,
+        middlewares.limiter.run,
+        middlewares.cache.run,
         api
 );
 
-
-app.use(middlewares.notFound);
-app.use(middlewares.errorHandler);
+app.use(middlewares.notFound.run);
+app.use(middlewares.errorHandler.run);
 
 module.exports = app;
