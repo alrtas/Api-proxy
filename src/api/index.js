@@ -1,6 +1,6 @@
 const express     = require('express');
 const emojis      = require('./emojis');
-const marsWeather = require('./mars-weather')
+const space       = require('./space')
 const faqs        = require('./faqs');
 const config      = require('./config');
 
@@ -13,7 +13,7 @@ router.get('/', (req, res) => {
 });
 
 router.use('/emojis', emojis);
-router.use('/mars-weather', marsWeather);
+router.use('/space', space);
 router.use('/faqs',faqs);
 router.use('/config', config);
 
