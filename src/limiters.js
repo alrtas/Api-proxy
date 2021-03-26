@@ -1,6 +1,4 @@
-const db    = require('./db');
 const Log   = require('./models/log');
-db.connect() 
 
 /**
  * @param {number} windowMs - Number in seconds that must be evaluated

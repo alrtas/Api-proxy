@@ -1,6 +1,5 @@
 const express   = require('express');
 const axios     = require('axios');
-const app       = require('../app');
 const cache     = require('../cache');
 
 

@@ -1,10 +1,7 @@
 const express   = require('express');
 const Faq       = require('../models/faq');
 const cache     = require('../cache');
-const db        = require('../db');
 const router    = express.Router();
-
-db.connect()
 
 router.get('/',async (req, res, next) => {
     try 

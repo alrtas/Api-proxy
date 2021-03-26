@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-const db        = require('../db');
-db.connect()
 
 const limiterSchema = mongoose.Schema(
     {
