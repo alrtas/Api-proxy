@@ -14,11 +14,10 @@ app.use(morgan('dev'));
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
-
 //Here is the important stuff is going on
-app.use('/api/v1',
+app.use('/',
         middlewares.log,
-        middlewares.limiter,
+        //middlewares.limiter,
         middlewares.cache,
         api
 );
