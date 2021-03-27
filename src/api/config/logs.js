@@ -1,11 +1,15 @@
 const express   = require('express');
+const Log       = require('../../models/log')
+const cache     = require('../../cache');
 const router    = express.Router();
-
 
 router.get('/',async(req, res, next) => {
     try 
     {
-        res.json('get a log item');
+        const item = await Log.find({});
+        await cache.set(item, req.originalUrl);
+        if(!item) return next();
+        return res.json(item);
     } 
     catch (error) 
     {
@@ -13,35 +17,38 @@ router.get('/',async(req, res, next) => {
         next(error)
     }
 })
-router.post('/', async(req, res, next) => {
+router.get('/:id',async(req, res, next) => {
     try 
     {
-        res.json('create a log item');
-    }
-    catch(error)
+        const { id } =  req.params;
+        const item = await Log.findOne({
+            _id: id,
+        });
+        await cache.set(item, req.originalUrl);
+        if(!item) return next();
+        return res.json(item);
+    } 
+    catch (error) 
     {
+        console.dir('ERROR:'+error)
         next(error)
     }
 })
-router.put('/', async(req, res, next) => {
+router.get('/start/:start/end/:end',async(req, res, next) => {
     try 
     {
-        res.json('update a log item');
-    }
-    catch(error)
+        const { start, end } =  req.params;
+        const item = await Log.find({
+            "time": {"$gte": start,"$lte": end}
+        });
+        await cache.set(item, req.originalUrl);
+        if(!item) return next();
+        return res.json(item);
+    } 
+    catch (error) 
     {
+        console.dir('ERROR:'+error)
         next(error)
     }
 })
-router.delete('/', async(req, res, next) => {
-    try 
-    {
-        res.json('delete a log item');
-    }
-    catch(error)
-    {
-        next(error)
-    }   
-})
-
 module.exports = router;

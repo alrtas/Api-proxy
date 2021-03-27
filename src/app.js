@@ -20,7 +20,7 @@ app.use(express.json());
 
 app.use('/',
         middlewares.log.run,
-        //middlewares.limiter.run,
+        middlewares.limiter.run,
         middlewares.cache.run,
         api
 );
