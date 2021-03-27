@@ -30,7 +30,7 @@ describe('GET /faqs', () => {
       .get('/faqs')
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
-      .expect(200, [{"_id":"605a5086c48466829407d9e7","question":"this is another question","answer":"and thats is a answer","videoUrl":"http://youtube.com/answer","__v":0},{"_id":"605a50acc48466829407d9e9","question":"this is one question","answer":"Somente answer with no video","__v":0},{"_id":"605a5136fdd731553c35c797","question":"anotehr question","answer":"sample answer","__v":0},{"_id":"605a5887a57f3e4a8c46c3c0","question":"another question","answer":"altered","videoUrl":"https://someurl.com/","__v":0},{"_id":"605a60faba3d49d758e60ca7","question":"another question","answer":"no, dunno","videoUrl":"https://someurl.com/","__v":0}], done);
+      .expect(200, done);
   });
 });
 
@@ -47,7 +47,7 @@ describe('GET /faqs/:id', () => {
 describe('GET /mars-weather', () => {
   it('responds with mars weather', (done) => {
     request(app)
-      .get('/mars-weather')
+      .get('/space/mars-weather')
       .set({ 'X-API-KEY': '12345', Accept: 'application/json' })
       .expect('Content-Type', /json/)
       .expect(200, done);
@@ -72,6 +72,7 @@ describe('POST /config/limiters', () => {
       .expect(200,  done);
   });
 });
+
 describe('POST Again /config/limiters', () => {
   it('responds with 409 Conflic', (done) => {
     request(app)
@@ -81,6 +82,7 @@ describe('POST Again /config/limiters', () => {
       .expect(409,  done);
   });
 });
+
 describe('PUT /config/limiters', () => {
   it('Missing params so 400 Bad request', (done) => {
     request(app)
@@ -90,6 +92,7 @@ describe('PUT /config/limiters', () => {
       .expect(400,  done);
   });
 });
+
 describe('PUT /config/limiters', () => {
   it('responds with 200 OK', (done) => {
     request(app)
@@ -99,6 +102,7 @@ describe('PUT /config/limiters', () => {
       .expect(200,  done);
   });
 });
+
 describe('GET /config/limiters', () => {
   it('responds with 200 OK', (done) => {
     request(app)
@@ -136,9 +140,6 @@ describe('PUT /config/limiters', () => {
   });
 });
 
-
-
-
 describe('GET /config/caches', () => {
   it('is empty so responds with 204 No content', (done) => {
     request(app)
@@ -167,6 +168,7 @@ describe('POST /config/caches', () => {
       .expect(200,  done);
   });
 });
+
 describe('POST Again /config/caches', () => {
   it('Duplicate so 409 conflict', (done) => {
     request(app)
@@ -186,6 +188,7 @@ describe('PUT /config/caches', () => {
       .expect(400,  done);
   });
 });
+
 describe('PUT /config/caches', () => {
   it('Respond with 200 OK', (done) => {
     request(app)
@@ -204,6 +207,7 @@ describe('GET /config/caches', () => {
       .expect(200,  done);
   });
 });
+
 describe('DELETE /config/caches', () => {
   it('responds with 200 OK', (done) => {
     request(app)
