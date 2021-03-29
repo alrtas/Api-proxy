@@ -12,9 +12,9 @@ um intermediário para as requisições dos clientes, enviando-as à api.mercado
   - [x] IP de origem
   - [x] Path de destino
   - [x] Combinações de ambos
-- [ ] Deve armazenar (e também permitir que se consulte) as estatísticas de uso do proxy.
+- [x] Deve armazenar (e também permitir que se consulte) as estatísticas de uso do proxy.
 ## Adicional
-- [ ] A interface para estatísticas e controle deveria prover APIs Rest.
+- [x] A interface para estatísticas e controle deveria prover APIs Rest.
 - [x] Um desenho simples de arquitetura da solução conta muito.
 - [x] Cache
 
