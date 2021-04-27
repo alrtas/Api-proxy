@@ -31,8 +31,7 @@ The API proxy isolates the application developer from its back-end service. Ther
 
 You can use policies in the API proxy to add functionality to a service without having to make changes to the backend service. For example, you can add policies to your proxy to perform data transformation and filtering, add security, perform conditional logic or custom code, and many other actions. The important thing to remember is that you implement policies on the Edge, not on your back-end server.
 
-
-# Proposta de solução
+# Solution proposal
 To solve the problem, remembering that the need to code is explicit in the text, a structure was created, in JavaScript, that will act as a Proxy in the entire domain `/`, that is, all requests that pass through the machine, in the application in the path `/ *` all middlewares work, to complete the challenge the following middlewares were coded.
  - Logs
     - It will save in a mongodb database in * proxy.logs * a document for each request made that passes through path * / *, saving information such as, `time`,` ip`, and `path` data. Some data from the LOGs can be extracted via the REST API
