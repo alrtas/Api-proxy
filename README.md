@@ -49,7 +49,7 @@ A middleware with a very simple concept of security has also been added. The imp
  
 ### APIs created
  
-[project.postman_collection.zip] (https://github.com/alrtas/api-proxy/files/6218628/Meli.postman_collection.zip)
+[project.postman_collection.zip](https://github.com/alrtas/api-proxy/files/6218628/Meli.postman_collection.zip)
 
 ### Technologies used
 
@@ -58,18 +58,18 @@ A middleware with a very simple concept of security has also been added. The imp
 
 # Other solutions
 
-* [Apigee] (https://cloud.google.com/apigee?hl=en)
-* [NGINX Plus] (https://www.nginx.com/solutions/api-management-gateway/)
-* [Amazon API Gateway] (https://aws.amazon.com/en/api-gateway/)
+* [Apigee](https://cloud.google.com/apigee?hl=en)
+* [NGINX Plus](https://www.nginx.com/solutions/api-management-gateway/)
+* [Amazon API Gateway](https://aws.amazon.com/en/api-gateway/)
 
 
 # Example architecture
-! [image] (https://user-images.githubusercontent.com/32065208/112071293-3a7e5580-8b4e-11eb-8729-343668e8c357.png)
+![image](https://user-images.githubusercontent.com/32065208/112071293-3a7e5580-8b4e-11eb-8729-343668e8c357.png)
 
 # Middlewares
-! [log_mediator] (https://user-images.githubusercontent.com/32065208/112524630-d098c280-8d7e-11eb-84e7-8f82bebf3a95.PNG)
-! [limiter_mediator] (https://user-images.githubusercontent.com/32065208/112525070-469d2980-8d7f-11eb-9c5f-4d1469d692bc.PNG)
-! [cache_mediator] (https://user-images.githubusercontent.com/32065208/112524671-d7273a00-8d7e-11eb-85e5-94ab82721dfc.PNG)
+![log_mediator](https://user-images.githubusercontent.com/32065208/112524630-d098c280-8d7e-11eb-84e7-8f82bebf3a95.PNG)
+![limiter_mediator](https://user-images.githubusercontent.com/32065208/112525070-469d2980-8d7f-11eb-9c5f-4d1469d692bc.PNG)
+![cache_mediator](https://user-images.githubusercontent.com/32065208/112524671-d7273a00-8d7e-11eb-85e5-94ab82721dfc.PNG)
 
 
 # Improvements
