@@ -1,13 +1,10 @@
-# Mercado livre API Proxy
-O MercadoLivre possui atualmente +30.000 servidores onde suas aplicações são executadas. Elas
-comunicam-se entre si através de apis, sendo que algumas possuem ainda acesso externo
-(api.mercadolibre.com).
-Um dos problemas que temos é como controlar e medir estas interconexões.
-Para isso, precisamos implementar (codifique) um "proxy de apis" com os seguintes requisitos (em
+# API Proxy
+Um dos problemas hoje no mundo da tecnologia é como controlar e medir as interconexões, ou chamadas API.
+Para isso, implementei (codifiquei) um "proxy de apis" com os seguintes requisitos (em
 ordem de importância):
-## Desafio
-- [x] Executar a função de proxy sobre o domínio api.mercadolibre.com, isto é, ele deve agir como
-um intermediário para as requisições dos clientes, enviando-as à api.mercadolibre.com.
+## Requisitos
+- [x] Executar a função de proxy sobre o domínio da maquina, isto é, ele deve agir como
+um intermediário para as requisições dos clientes.
 - [x] Deverá permitir o controle das quantidades máximas de requisições por:
   - [x] IP de origem
   - [x] Path de destino
@@ -18,14 +15,6 @@ um intermediário para as requisições dos clientes, enviando-as à api.mercado
 - [x] Um desenho simples de arquitetura da solução conta muito.
 - [x] Cache
 
-## Outros
-Sabemos que o teste é complexo e seria desejável ter todos os requisitos implementados (e
-funcionando), no entanto, qualquer nível de completude será aceito.
-O código deve estar disponível em um repositório privado do Github ou Bitbucket. Após finalizar
-o desenvolvimento, adicione o usuário ITMLB (it-mlb@mercadolivre.com) como colaborador para
-que possamos avaliá-lo.<br>
-O proxy (como solução) deverá poder superar 50.000 requisições por segundo. Não faremos
-testes de carga, mas avaliaremos se a arquitetura utilizada é escalável o suficiente.
 
 # Entendimento do problema
 
@@ -61,7 +50,7 @@ Também foi adicionado um middleware com um conceito bem simplorio de segurança
  
 ### APIs criadas 
  
-[Meli.postman_collection.zip](https://github.com/alrtas/api-proxy/files/6218628/Meli.postman_collection.zip)
+[projeto.postman_collection.zip](https://github.com/alrtas/api-proxy/files/6218628/Meli.postman_collection.zip)
 
 ### Técnologias utilizadas
 
