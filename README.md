@@ -14,7 +14,7 @@ an intermediary for customer requests.
 - [x] The interface for statistics and control should provide Rest APIs.
 - [x] A simple architectural design of the solution counts a lot.
 - [x] Cache
-
+    
 
 # Understanding the problem
 
