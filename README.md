@@ -7,7 +7,7 @@ order of importance):
 an intermediary for customer requests.
 - [x] It should allow the control of the maximum number of requisitions by:
   - [x] Source IP
-  - [x] Destination path
+  - [x] Destination path 
   - [x] Combinations of both
 - [x] It should store (and also allow to consult) the proxy usage statistics.
 ## Additional
