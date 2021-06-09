@@ -15,7 +15,7 @@ an intermediary for customer requests.
 - [x] A simple architectural design of the solution counts a lot.
 - [x] Cache
     
-
+  
 # Understanding the problem
 
 An API proxy is an interface for developers who want to use their backend services. Instead of making them consume these services directly, they access a created API proxy. With a proxy, you can provide resources to increase added value, such as:
